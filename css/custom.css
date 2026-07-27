@@ -1,0 +1,67 @@
+/*
+  Custom widget-board page (custom.html): same drag/resize widget frame as
+  background.html (css/background.css), but no photo — just the 4 widgets
+  on the regular ambient orb background, always all visible (no picker).
+*/
+
+/* calendar.css sets :root --bg/--cal-accent/--cal-today-text for the
+   calendar page's own color picker defaults (forces a black page bg).
+   Restore the normal dashboard theme here since custom.html has no color
+   picker of its own. */
+:root {
+  --bg: #07070d;
+  --cal-accent: #7c6cf0;
+  --cal-today-text: #ffffff;
+}
+
+/* no widget-picker bar on this page, so the toast doesn't need the extra
+   clearance background.css adds for it */
+.toast {
+  bottom: calc(env(safe-area-inset-bottom) + 32px);
+}
+
+/* ---- widget default sizes ---- */
+.bg-widget[data-widget="clock"] {
+  width: min(280px, calc(100vw - 40px));
+}
+
+.bg-widget[data-widget="timer"] {
+  width: min(300px, calc(100vw - 40px));
+}
+
+.bg-widget[data-widget="todo"] {
+  width: min(320px, calc(100vw - 40px));
+  height: min(440px, calc(100vh - 220px));
+}
+
+.bg-widget[data-widget="calendar"] {
+  width: min(340px, calc(100vw - 40px));
+}
+
+@media (max-width: 500px) {
+  .bg-widgets-stack {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: calc(env(safe-area-inset-top) + 90px) 0 40px;
+  }
+
+  .bg-widget[data-widget="clock"],
+  .bg-widget[data-widget="todo"],
+  .bg-widget[data-widget="calendar"],
+  .bg-widget[data-widget="timer"] {
+    width: calc(100vw - 32px);
+    position: static;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+  }
+
+  .bg-widget-handle,
+  .bg-widget-resize {
+    display: none;
+  }
+}

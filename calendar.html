@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Gredo · Calendar</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/nav.css">
+<link rel="stylesheet" href="css/calendar.css">
+</head>
+<body>
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
+  <nav class="top-nav" data-current="calendar"></nav>
+  <template id="navExtra">
+    <button class="nav-btn" id="calColorToggle" aria-label="색상 설정">
+      <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22a10 10 0 1 1 0-20c5 0 9 3.5 9 8 0 2-1.5 3-3 3h-2a2 2 0 0 0 0 4h.5a1.5 1.5 0 0 1 0 3A9 9 0 0 1 12 22z"></path>
+        <circle cx="7.5" cy="10.5" r="1.2" fill="currentColor" stroke="none"></circle>
+        <circle cx="12" cy="7.5" r="1.2" fill="currentColor" stroke="none"></circle>
+        <circle cx="16.5" cy="10.5" r="1.2" fill="currentColor" stroke="none"></circle>
+      </svg>
+    </button>
+  </template>
+  <script src="js/nav.js"></script>
+
+  <div class="cal-color-popover" id="calColorPopover">
+    <div class="cal-color-popover-row">
+      <span class="cal-color-popover-label">포인트 색상</span>
+      <div class="color-swatches" id="calColorSwatches">
+        <button class="swatch" data-color="#eef1f6" style="--c:#eef1f6"></button>
+        <button class="swatch" data-color="#00e5ff" style="--c:#00e5ff"></button>
+        <button class="swatch" data-color="#39ff6a" style="--c:#39ff6a"></button>
+        <button class="swatch" data-color="#ff5a5a" style="--c:#ff5a5a"></button>
+        <button class="swatch" data-color="#ffb020" style="--c:#ffb020"></button>
+        <button class="swatch" data-color="#c86bff" style="--c:#c86bff"></button>
+        <label class="swatch swatch-custom" style="--c:conic-gradient(from 0deg, red, yellow, lime, cyan, blue, magenta, red)">
+          <input type="color" id="calCustomColor" value="#eef1f6">
+        </label>
+      </div>
+    </div>
+    <div class="cal-color-popover-row">
+      <span class="cal-color-popover-label">배경 색상</span>
+      <div class="color-swatches" id="calBgSwatches">
+        <button class="swatch" data-color="#000000" style="--c:#000000"></button>
+        <button class="swatch" data-color="#1c1c1e" style="--c:#1c1c1e"></button>
+        <button class="swatch" data-color="#0a1a2f" style="--c:#0a1a2f"></button>
+        <button class="swatch" data-color="#ffffff" style="--c:#ffffff"></button>
+        <button class="swatch" data-color="#ffe08a" style="--c:#ffe08a"></button>
+        <label class="swatch swatch-custom" style="--c:conic-gradient(from 0deg, red, yellow, lime, cyan, blue, magenta, red)">
+          <input type="color" id="calBgCustomColor" value="#000000">
+        </label>
+      </div>
+    </div>
+    <div class="cal-color-popover-row">
+      <span class="cal-color-popover-label">시계 색상</span>
+      <div class="color-swatches" id="calClockSwatches">
+        <button class="swatch" data-color="#eef1f6" style="--c:#eef1f6"></button>
+        <button class="swatch" data-color="#00e5ff" style="--c:#00e5ff"></button>
+        <button class="swatch" data-color="#39ff6a" style="--c:#39ff6a"></button>
+        <button class="swatch" data-color="#ff5a5a" style="--c:#ff5a5a"></button>
+        <button class="swatch" data-color="#ffb020" style="--c:#ffb020"></button>
+        <button class="swatch" data-color="#c86bff" style="--c:#c86bff"></button>
+        <label class="swatch swatch-custom" style="--c:conic-gradient(from 0deg, red, yellow, lime, cyan, blue, magenta, red)">
+          <input type="color" id="calClockCustomColor" value="#eef1f6">
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <main class="cal-page">
+    <section class="clock-block">
+      <div class="flip-card" data-unit="hour">
+        <div class="flip-half flip-half--top">
+          <div class="flip-number-frame"><span class="flip-number" data-frame="top">00</span></div>
+        </div>
+        <div class="flip-half flip-half--bottom">
+          <div class="flip-number-frame"><span class="flip-number" data-frame="bottom">00</span></div>
+        </div>
+        <div class="flip-flap">
+          <div class="flip-number-frame"><span class="flip-number" data-frame="flap">00</span></div>
+        </div>
+        <span class="flip-sub" id="calAmPm">AM</span>
+      </div>
+      <div class="flip-card" data-unit="minute">
+        <div class="flip-half flip-half--top">
+          <div class="flip-number-frame"><span class="flip-number" data-frame="top">00</span></div>
+        </div>
+        <div class="flip-half flip-half--bottom">
+          <div class="flip-number-frame"><span class="flip-number" data-frame="bottom">00</span></div>
+        </div>
+        <div class="flip-flap">
+          <div class="flip-number-frame"><span class="flip-number" data-frame="flap">00</span></div>
+        </div>
+        <span class="flip-sub" id="calWeekday">SUNDAY</span>
+      </div>
+    </section>
+
+    <section class="calendar-block">
+      <div class="cal-header">
+        <button class="cal-nav-btn" id="calPrevBtn" aria-label="이전 달">‹</button>
+        <span class="cal-month-label" id="calMonthLabel">2026년 7월</span>
+        <button class="cal-nav-btn" id="calNextBtn" aria-label="다음 달">›</button>
+      </div>
+      <div class="cal-weekdays">
+        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </section>
+  </main>
+
+<script src="js/core/clock.js"></script>
+<script src="js/core/calendarGrid.js"></script>
+<script src="js/calendar.js"></script>
+</body>
+</html>

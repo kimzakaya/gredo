@@ -11,6 +11,7 @@
   <title>Gredo · To-Do</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/nav.css">
   <link rel="stylesheet" href="css/todo.css">
 </head>
 <body data-style="bold">
@@ -20,43 +21,8 @@
     <span class="orb orb-3"></span>
   </div>
 
-  <nav class="top-nav">
-    <a class="nav-btn" href="index.html" aria-label="메인 시계 화면으로 돌아가기" data-tooltip="🕒 Clock · 디지털 시계">
-      <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9"></circle>
-        <polyline points="12 7 12 12 15 14"></polyline>
-      </svg>
-    </a>
-    <a class="nav-btn" href="dashboard.html" aria-label="대시보드" data-tooltip="🌤️ Dashboard · 날씨+포모도로">
-      <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="9" rx="1.5"></rect>
-        <rect x="14" y="3" width="7" height="5" rx="1.5"></rect>
-        <rect x="14" y="12" width="7" height="9" rx="1.5"></rect>
-        <rect x="3" y="16" width="7" height="5" rx="1.5"></rect>
-      </svg>
-    </a>
-    <a class="nav-btn" href="background.html" aria-label="나만의 배경" data-tooltip="🖼️ My Background · 나만의 배경 만들기">
-      <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-        <path d="M21 15l-5-5L5 21"></path>
-      </svg>
-    </a>
-    <button class="nav-btn" id="fullscreenToggle" aria-label="전체화면">
-      <svg class="icon-enter" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
-        <path d="M16 3h3a2 2 0 0 1 2 2v3"></path>
-        <path d="M8 21H5a2 2 0 0 1-2-2v-3"></path>
-        <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
-      </svg>
-      <svg class="icon-exit" viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 3v3a2 2 0 0 1-2 2H4"></path>
-        <path d="M15 3v3a2 2 0 0 0 2 2h3"></path>
-        <path d="M9 21v-3a2 2 0 0 0-2-2H4"></path>
-        <path d="M15 21v-3a2 2 0 0 1 2-2h3"></path>
-      </svg>
-    </button>
-  </nav>
+  <nav class="top-nav" data-current="todo"></nav>
+  <script src="js/nav.js"></script>
 
   <div class="dashboard">
     <section class="card todo-container">
@@ -174,6 +140,7 @@
   <script src="js/timer.js"></script>
   <script src="js/core/notifications.js"></script>
   <script src="js/core/pomodoroEngine.js"></script>
+  <script src="js/core/clock.js"></script>
   <script src="js/dashboard.js"></script>
   <script src="js/todo.js"></script>
 

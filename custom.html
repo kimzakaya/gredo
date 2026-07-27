@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a10">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Gredo · Custom</title>
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/nav.css">
+<link rel="stylesheet" href="css/todo.css">
+<link rel="stylesheet" href="css/calendar.css">
+<link rel="stylesheet" href="css/background.css">
+<link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
+  <nav class="top-nav" data-current="custom"></nav>
+  <script src="js/nav.js"></script>
+
+  <div class="bg-widgets-stack" id="widgetsStack">
+    <div class="bg-widget" id="widgetClock" data-widget="clock">
+      <div class="bg-widget-handle">⠿ 시계</div>
+      <section class="card clock-card">
+        <span class="card-glare"></span>
+        <div class="clock-date" id="clockDate">2026.07.22 | WED</div>
+        <div class="clock-time-row">
+          <span class="clock-ampm" id="clockAmpm">AM</span>
+          <span class="clock-time" id="clockTime">11:17</span>
+          <span class="clock-seconds" id="clockSeconds">37</span>
+        </div>
+      </section>
+      <div class="bg-widget-resize" aria-label="크기 조절"></div>
+    </div>
+
+    <div class="bg-widget" id="widgetTodo" data-widget="todo">
+      <div class="bg-widget-handle">⠿ 할 일</div>
+      <section class="card todo-container">
+        <h1 class="todo-title">To-Do List</h1>
+        <form class="todo-form" id="todoForm">
+          <input type="text" id="todoInput" class="todo-input" placeholder="새로운 할 일을 추가하세요..." autocomplete="off">
+          <button type="submit" class="todo-add-btn" aria-label="할 일 추가">+</button>
+        </form>
+        <ul class="todo-list" id="todoList">
+          <!-- To-do items will be rendered here by JavaScript -->
+        </ul>
+        <div class="todo-footer">
+          <button class="todo-io-btn" id="exportBtn">저장하기</button>
+          <label class="todo-io-btn">
+            불러오기
+            <input type="file" id="importInput" accept=".json" style="display: none;">
+          </label>
+          <button class="todo-io-btn todo-clear-btn" id="clearCompletedBtn" style="display: none;">완료된 항목 삭제</button>
+        </div>
+      </section>
+      <div class="bg-widget-resize" aria-label="크기 조절"></div>
+    </div>
+
+    <div class="bg-widget" id="widgetCalendar" data-widget="calendar">
+      <div class="bg-widget-handle">⠿ 달력</div>
+      <section class="calendar-block">
+        <div class="cal-header">
+          <button class="cal-nav-btn" id="calPrevBtn" aria-label="이전 달">‹</button>
+          <span class="cal-month-label" id="calMonthLabel">2026년 7월</span>
+          <button class="cal-nav-btn" id="calNextBtn" aria-label="다음 달">›</button>
+        </div>
+        <div class="cal-weekdays">
+          <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </section>
+      <div class="bg-widget-resize" aria-label="크기 조절"></div>
+    </div>
+
+    <div class="bg-widget" id="widgetTimer" data-widget="timer">
+      <div class="bg-widget-handle">⠿ 포모도로</div>
+      <section class="card timer-card">
+        <span class="card-glare"></span>
+        <div class="timer-header">
+          <span class="timer-title"><span class="timer-emoji">🍅</span>Focus Timer</span>
+          <button class="timer-gear" id="pomodoroGearBtn" aria-label="포모도로 설정">
+            <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="timer-tabs" id="timerTabs">
+          <button class="timer-tab active" data-tab="pomodoro">포모도로</button>
+          <button class="timer-tab" data-tab="timer">타이머</button>
+          <button class="timer-tab" data-tab="stopwatch">스톱워치</button>
+        </div>
+
+        <div class="timer-settings-popover hidden" id="pomodoroSettingsPopover">
+          <div class="mini-row">
+            <span>집중</span>
+            <div class="mini-stepper">
+              <button data-key="work" data-delta="-5" aria-label="집중 시간 축소">−</button>
+              <span id="popWorkValue">25분</span>
+              <button data-key="work" data-delta="5" aria-label="집중 시간 확대">+</button>
+            </div>
+          </div>
+          <div class="mini-row">
+            <span>짧은 휴식</span>
+            <div class="mini-stepper">
+              <button data-key="shortBreak" data-delta="-1" aria-label="짧은 휴식 축소">−</button>
+              <span id="popShortValue">5분</span>
+              <button data-key="shortBreak" data-delta="1" aria-label="짧은 휴식 확대">+</button>
+            </div>
+          </div>
+          <div class="mini-row">
+            <span>긴 휴식</span>
+            <div class="mini-stepper">
+              <button data-key="longBreak" data-delta="-5" aria-label="긴 휴식 축소">−</button>
+              <span id="popLongValue">15분</span>
+              <button data-key="longBreak" data-delta="5" aria-label="긴 휴식 확대">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="timer-display" id="timerDisplay">25:00</div>
+
+        <div class="timer-minute-row hidden" id="timerMinuteRow">
+          <button class="mini-stepper-btn" id="timerMinusBtn" aria-label="타이머 시간 축소">−</button>
+          <span id="timerMinutesLabel">10분</span>
+          <button class="mini-stepper-btn" id="timerPlusBtn" aria-label="타이머 시간 확대">+</button>
+        </div>
+
+        <div class="timer-actions">
+          <button class="timer-reset-btn" id="timerResetBtn" aria-label="초기화">
+            <svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+              <path d="M3 4v5h5"></path>
+            </svg>
+          </button>
+          <button class="timer-start-btn" id="timerStartBtn">▶ 시작하기</button>
+        </div>
+
+        <div class="timer-caption" id="timerCaption">25분 집중 · 5분 휴식</div>
+      </section>
+      <div class="bg-widget-resize" aria-label="크기 조절"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="io-info-backdrop" id="ioInfoBackdrop"></div>
+  <div class="io-info-panel" id="ioInfoPanel">
+    <h2 class="io-info-title">💾 할 일 백업하기</h2>
+    <p class="io-info-desc">할 일 목록은 이 브라우저에만 저장돼요. 브라우저 데이터를 지우거나 다른 기기·브라우저를 쓰면 목록이 사라질 수 있어요. 파일로 저장해두면 안전하게 보관하고 나중에 다시 불러올 수 있어요.</p>
+    <div class="io-info-row">
+      <span class="io-info-icon">💾</span>
+      <div>
+        <strong>저장하기</strong>
+        <p>지금 목록을 파일로 다운로드해서 보관해요.</p>
+      </div>
+    </div>
+    <div class="io-info-row">
+      <span class="io-info-icon">📂</span>
+      <div>
+        <strong>불러오기</strong>
+        <p>저장해둔 파일을 선택하면 목록이 그대로 복원돼요.</p>
+      </div>
+    </div>
+    <div class="io-info-actions">
+      <button class="io-info-cancel" id="ioInfoCancelBtn">닫기</button>
+      <button class="io-info-confirm" id="ioInfoConfirmBtn">파일로 저장하기</button>
+    </div>
+  </div>
+
+  <script src="js/timer.js"></script>
+  <script src="js/core/notifications.js"></script>
+  <script src="js/core/pomodoroEngine.js"></script>
+  <script src="js/core/clock.js"></script>
+  <script src="js/core/calendarGrid.js"></script>
+  <script src="js/core/widgetBoard.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/todo.js"></script>
+  <script src="js/custom.js"></script>
+</body>
+</html>

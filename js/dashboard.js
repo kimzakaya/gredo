@@ -1,5 +1,4 @@
-const KO_WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
-const EN_WEEKDAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+const Clock = window.Gredo.Clock;
 
 const QUOTES = [
   "오늘도 당신의 하루를 응원합니다.",
@@ -85,25 +84,19 @@ function renderQuote() {
 /* ---- clock ---- */
 
 function renderClock() {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
+  const parts = Clock.getParts();
 
   if (dashboardDateEl) {
-    dashboardDateEl.textContent = `${y}년 ${now.getMonth() + 1}월 ${now.getDate()}일 (${KO_WEEKDAYS[now.getDay()]})`;
+    dashboardDateEl.textContent = `${parts.year}년 ${parts.month}월 ${parts.day}일 (${parts.weekdayKoShort})`;
   }
   if (clockDateEl) {
-    clockDateEl.textContent = `${y}.${m}.${d} | ${EN_WEEKDAYS[now.getDay()]}`;
+    clockDateEl.textContent = `${parts.year}.${parts.monthPadded}.${parts.dayPadded} | ${parts.weekdayEnShort}`;
   }
 
   if (clockAmpmEl && clockTimeEl && clockSecondsEl) {
-    const hours24 = now.getHours();
-    clockAmpmEl.textContent = hours24 >= 12 ? "PM" : "AM";
-    let displayHours = hours24 % 12;
-    if (displayHours === 0) displayHours = 12;
-    clockTimeEl.textContent = `${String(displayHours).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-    clockSecondsEl.textContent = String(now.getSeconds()).padStart(2, "0");
+    clockAmpmEl.textContent = parts.ampm;
+    clockTimeEl.textContent = `${parts.hours12Padded}:${parts.minutesPadded}`;
+    clockSecondsEl.textContent = parts.secondsPadded;
   }
 }
 
@@ -153,6 +146,7 @@ function loadWeatherFor(lat, lon, cityNamePromise) {
 }
 
 function loadWeather() {
+  if (!weatherCityEl) return;
   weatherCityEl.textContent = "위치 확인 중...";
   weatherDescEl.textContent = "";
 

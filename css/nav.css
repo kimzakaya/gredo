@@ -1,0 +1,122 @@
+/*
+  Shared top-right icon navigation used by dashboard.html, toDoList.html,
+  background.html, and calendar.html. Markup is rendered by js/nav.js —
+  see that file for the page list and the .top-nav[data-current] contract.
+
+  Single source of truth for .top-nav/.nav-btn/[data-tooltip]: previously
+  duplicated in style.css and dashboard.css with conflicting left/right
+  tooltip anchors, which broke tooltip sizing on any page loading both.
+*/
+
+.top-nav {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 18px);
+  right: calc(env(safe-area-inset-right) + 18px);
+  display: flex;
+  gap: 14px;
+  z-index: 20;
+}
+
+.nav-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border: none;
+  border-radius: 50%;
+  background: var(--nav-btn-bg, rgba(255, 255, 255, 0.08));
+  color: var(--nav-btn-color, #cfd3da);
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.nav-btn:active {
+  background: var(--nav-btn-bg-active, rgba(255, 255, 255, 0.16));
+}
+
+.nav-btn .icon-exit {
+  display: none;
+}
+
+.nav-btn.is-fullscreen .icon-enter {
+  display: none;
+}
+
+.nav-btn.is-fullscreen .icon-exit {
+  display: block;
+}
+
+/* ---- icon button tooltip ---- */
+[data-tooltip]::after,
+[data-tooltip]::before {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition-delay: 0.1s;
+  z-index: 30;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  white-space: nowrap;
+  background: rgba(18, 18, 26, 0.92);
+  color: #eef1f6;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  transform: translateY(-4px);
+}
+
+[data-tooltip]::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 14px;
+  width: 8px;
+  height: 8px;
+  background: rgba(18, 18, 26, 0.92);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  transform: translateY(2px) rotate(45deg);
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:focus-visible::before {
+  opacity: 1;
+  transform: rotate(45deg);
+}
+
+/* Narrow phones (≤480px): shrink buttons/gap so pages with an extra
+   navExtra button (background.html, calendar.html — 7 icons total)
+   don't push the leftmost icon off-screen. */
+@media (max-width: 480px) {
+  .top-nav {
+    top: calc(env(safe-area-inset-top) + 10px);
+    right: calc(env(safe-area-inset-right) + 10px);
+    gap: 8px;
+  }
+
+  .nav-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+}

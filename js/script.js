@@ -1,7 +1,6 @@
 const Notifications = window.Gredo.Notifications;
+const Clock = window.Gredo.Clock;
 
-const WEEKDAYS_KO = ["일", "월", "화", "수", "목", "금", "토"];
-const WEEKDAYS_EN = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 const STORAGE_KEY = "gredoSettings";
 const LEGACY_STORAGE_KEY = "myClockSettings";
 const BG_COLORS = { digital: "#000000", bold: "#12141c", glass: "#05050b" };
@@ -225,35 +224,20 @@ function stopPreview() {
 }
 
 function render() {
-  const now = new Date();
+  const parts = Clock.getParts();
 
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
   if (settings.style === "bold" || settings.style === "glass") {
-    const weekday = WEEKDAYS_EN[now.getDay()];
-    dateEl.textContent = `${y}.${m}.${d} | ${weekday}`;
+    dateEl.textContent = `${parts.year}.${parts.monthPadded}.${parts.dayPadded} | ${parts.weekdayEnShort}`;
   } else {
-    const weekday = WEEKDAYS_KO[now.getDay()];
-    dateEl.textContent = `${y}.${m}.${d} (${weekday})`;
+    dateEl.textContent = `${parts.year}.${parts.monthPadded}.${parts.dayPadded} (${parts.weekdayKoShort})`;
   }
 
-  const hours24 = now.getHours();
-  const isPM = hours24 >= 12;
-  ampmEl.textContent = isPM ? "PM" : "AM";
+  ampmEl.textContent = parts.ampm;
 
-  let displayHours = hours24;
-  if (settings.format === "12") {
-    displayHours = hours24 % 12;
-    if (displayHours === 0) displayHours = 12;
-  }
+  const hh = settings.format === "12" ? parts.hours12Padded : parts.hours24Padded;
 
-  const hh = String(displayHours).padStart(2, "0");
-  const mm = String(now.getMinutes()).padStart(2, "0");
-  const ss = String(now.getSeconds()).padStart(2, "0");
-
-  mainTimeEl.textContent = `${hh}:${mm}`;
-  secondsEl.textContent = ss;
+  mainTimeEl.textContent = `${hh}:${parts.minutesPadded}`;
+  secondsEl.textContent = parts.secondsPadded;
 
   refreshPreview();
 }

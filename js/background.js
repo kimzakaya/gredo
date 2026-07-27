@@ -1,6 +1,12 @@
 /*
   Custom background page: photo upload + draggable widget placement.
+  Widget drag/resize/picker mechanics live in js/core/widgetBoard.js
+  (shared with custom.js) — this file owns the board's storage shape
+  (including the `image` field, which widgetBoard.js knows nothing about)
+  and the photo upload/canvas logic.
 */
+
+const WidgetBoard = window.Gredo.WidgetBoard;
 
 const BG_STORAGE_KEY = "gredoBackgroundBoard";
 const LEGACY_BG_STORAGE_KEY = "myClockBackgroundBoard";
@@ -12,19 +18,8 @@ const LEGACY_BG_STORAGE_KEY = "myClockBackgroundBoard";
 })();
 const MAX_ACTIVE_WIDGETS_DESKTOP = 3;
 const MAX_ACTIVE_WIDGETS_MOBILE = 2;
-const mobileLayoutQuery = window.matchMedia("(max-width: 500px)");
-
-function isMobileLayout() {
-  return mobileLayoutQuery.matches;
-}
-
-function maxActiveWidgets() {
-  return isMobileLayout() ? MAX_ACTIVE_WIDGETS_MOBILE : MAX_ACTIVE_WIDGETS_DESKTOP;
-}
 const MAX_IMAGE_DIMENSION = 1920;
 const IMAGE_QUALITY = 0.82;
-const SCALE_MIN = 0.7;
-const SCALE_MAX = 1.6;
 
 const DEFAULT_WIDGET_POSITIONS = {
   clock: { x: 4, y: 14 },
@@ -150,156 +145,31 @@ bgUploadInput.addEventListener("change", (e) => {
   e.target.value = "";
 });
 
-/* ---- widget picker ---- */
-
-function activeWidgetCount() {
-  return Object.values(board.widgets).filter((w) => w.active).length;
-}
+/* ---- widget picker + drag/resize (mechanics shared via WidgetBoard) ---- */
 
 function renderWidgets() {
-  Object.keys(widgetEls).forEach((key) => {
-    const el = widgetEls[key];
-    const state = board.widgets[key];
-    el.classList.toggle("hidden", !state.active);
-    el.style.left = `${state.x}%`;
-    el.style.top = `${state.y}%`;
-    el.style.transform = `scale(${state.scale})`;
-  });
+  WidgetBoard.applyPositions(widgetEls, board.widgets);
   pickerChips.forEach((chip) => {
     chip.classList.toggle("active", board.widgets[chip.dataset.widget].active);
   });
 }
 
-pickerChips.forEach((chip) => {
-  chip.addEventListener("click", () => {
-    const key = chip.dataset.widget;
-    const state = board.widgets[key];
-    if (!state.active && activeWidgetCount() >= maxActiveWidgets()) {
-      showToast(`위젯은 최대 ${maxActiveWidgets()}개까지 선택할 수 있어요.`);
-      return;
-    }
-    state.active = !state.active;
-    saveBoard();
-    renderWidgets();
-  });
-});
-
-/* ---- keep active widget count within the mobile limit ---- */
-
-function enforceMobileWidgetLimit() {
-  if (!isMobileLayout()) return;
-  const keysInOrder = Object.keys(widgetEls);
-  let keptCount = 0;
-  let trimmed = false;
-  keysInOrder.forEach((key) => {
-    const state = board.widgets[key];
-    if (!state.active) return;
-    keptCount += 1;
-    if (keptCount > MAX_ACTIVE_WIDGETS_MOBILE) {
-      state.active = false;
-      trimmed = true;
-    }
-  });
-  if (trimmed) {
-    saveBoard();
-    renderWidgets();
-    showToast(`모바일에서는 위젯을 최대 ${MAX_ACTIVE_WIDGETS_MOBILE}개까지만 겹치지 않게 쓸 수 있어요.`);
+WidgetBoard.wireDrag(widgetEls, board.widgets, saveBoard);
+WidgetBoard.wireResize(widgetEls, board.widgets, saveBoard);
+WidgetBoard.wirePicker(
+  pickerChips,
+  board.widgets,
+  { maxActiveDesktop: MAX_ACTIVE_WIDGETS_DESKTOP, maxActiveMobile: MAX_ACTIVE_WIDGETS_MOBILE },
+  {
+    onChange: () => {
+      saveBoard();
+      renderWidgets();
+    },
+    onToast: showToast,
   }
-}
-
-mobileLayoutQuery.addEventListener("change", enforceMobileWidgetLimit);
-window.addEventListener("resize", enforceMobileWidgetLimit);
-
-/* ---- drag to reposition ---- */
-
-function clamp(value, min, max) {
-  return Math.min(max, Math.max(min, value));
-}
-
-Object.keys(widgetEls).forEach((key) => {
-  const wrapper = widgetEls[key];
-  const handle = wrapper.querySelector(".bg-widget-handle");
-  let startClientX = 0;
-  let startClientY = 0;
-  let startX = 0;
-  let startY = 0;
-
-  function onMove(e) {
-    const dxPct = ((e.clientX - startClientX) / window.innerWidth) * 100;
-    const dyPct = ((e.clientY - startClientY) / window.innerHeight) * 100;
-    const nextX = clamp(startX + dxPct, 0, 88);
-    const nextY = clamp(startY + dyPct, 0, 88);
-    board.widgets[key].x = nextX;
-    board.widgets[key].y = nextY;
-    wrapper.style.left = `${nextX}%`;
-    wrapper.style.top = `${nextY}%`;
-  }
-
-  function onUp(e) {
-    handle.releasePointerCapture(e.pointerId);
-    handle.removeEventListener("pointermove", onMove);
-    handle.removeEventListener("pointerup", onUp);
-    handle.removeEventListener("pointercancel", onUp);
-    saveBoard();
-  }
-
-  handle.addEventListener("pointerdown", (e) => {
-    handle.setPointerCapture(e.pointerId);
-    startClientX = e.clientX;
-    startClientY = e.clientY;
-    startX = board.widgets[key].x;
-    startY = board.widgets[key].y;
-    handle.addEventListener("pointermove", onMove);
-    handle.addEventListener("pointerup", onUp);
-    handle.addEventListener("pointercancel", onUp);
-  });
-});
-
-/* ---- drag to resize ---- */
-
-Object.keys(widgetEls).forEach((key) => {
-  const wrapper = widgetEls[key];
-  const resizeHandle = wrapper.querySelector(".bg-widget-resize");
-  let resizeStartClientX = 0;
-  let resizeStartClientY = 0;
-  let startScale = 1;
-
-  function onResizeMove(e) {
-    const dx = e.clientX - resizeStartClientX;
-    const dy = e.clientY - resizeStartClientY;
-    const nextScale = clamp(startScale + (dx + dy) / 2 / 150, SCALE_MIN, SCALE_MAX);
-    board.widgets[key].scale = nextScale;
-    wrapper.style.transform = `scale(${nextScale})`;
-  }
-
-  function onResizeUp(e) {
-    resizeHandle.releasePointerCapture(e.pointerId);
-    resizeHandle.removeEventListener("pointermove", onResizeMove);
-    resizeHandle.removeEventListener("pointerup", onResizeUp);
-    resizeHandle.removeEventListener("pointercancel", onResizeUp);
-    saveBoard();
-  }
-
-  resizeHandle.addEventListener("pointerdown", (e) => {
-    e.stopPropagation();
-    resizeHandle.setPointerCapture(e.pointerId);
-    resizeStartClientX = e.clientX;
-    resizeStartClientY = e.clientY;
-    startScale = board.widgets[key].scale;
-    resizeHandle.addEventListener("pointermove", onResizeMove);
-    resizeHandle.addEventListener("pointerup", onResizeUp);
-    resizeHandle.addEventListener("pointercancel", onResizeUp);
-  });
-
-  resizeHandle.addEventListener("dblclick", () => {
-    board.widgets[key].scale = 1;
-    wrapper.style.transform = "scale(1)";
-    saveBoard();
-  });
-});
+);
 
 /* ---- init ---- */
 
 renderBackground();
 renderWidgets();
-enforceMobileWidgetLimit();
