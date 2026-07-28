@@ -50,6 +50,23 @@
   display: block;
 }
 
+/* ---- hide/show toggle (eye pictogram) ---- */
+.nav-hide-toggle .icon-eye-off {
+  display: none;
+}
+
+.top-nav.nav-hidden .nav-hide-toggle .icon-eye-open {
+  display: none;
+}
+
+.top-nav.nav-hidden .nav-hide-toggle .icon-eye-off {
+  display: block;
+}
+
+.top-nav.nav-hidden .nav-btn:not(.nav-hide-toggle) {
+  display: none;
+}
+
 /* ---- icon button tooltip ---- */
 [data-tooltip]::after,
 [data-tooltip]::before {
