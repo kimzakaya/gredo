@@ -101,7 +101,7 @@
     PAGES.forEach(function (page) {
       if (page.id === current) return;
       html +=
-        '<a class="nav-btn" href="' + page.href + '" aria-label="' + page.label + '" data-tooltip="' + page.tooltip + '">' +
+        '<a class="nav-btn nav-page-' + page.id + '" href="' + page.href + '" aria-label="' + page.label + '" data-tooltip="' + page.tooltip + '">' +
         page.svg +
         "</a>";
     });

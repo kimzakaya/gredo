@@ -123,7 +123,9 @@
 
 /* Narrow phones (≤480px): shrink buttons/gap so pages with an extra
    navExtra button (background.html, calendar.html — 7 icons total)
-   don't push the leftmost icon off-screen. */
+   don't push the leftmost icon off-screen. Also drop the "나만의 배경"
+   page link — its drag/resize widget board is a desktop-pointer feature
+   and isn't usable on touch. */
 @media (max-width: 480px) {
   .top-nav {
     top: calc(env(safe-area-inset-top) + 10px);
@@ -135,5 +137,33 @@
     width: 32px;
     height: 32px;
     font-size: 16px;
+  }
+
+  .nav-page-background {
+    display: none;
+  }
+}
+
+/* Phones in landscape: none of the pages have a landscape layout (the
+   calendar's flip-clock + grid alone stack taller than a phone's
+   landscape height), so block it with a rotate prompt instead of
+   shipping a broken one. Scoped to phone widths so a resized desktop
+   window is unaffected. */
+@media (max-width: 900px) and (orientation: landscape) {
+  body::before {
+    content: "📱 세로 모드로 돌려서 사용해주세요";
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #eef1f6;
+    background: #05050b;
   }
 }

@@ -241,6 +241,12 @@ html, body {
     overflow-y: auto;
   }
 
+  /* mobile has no room in the top-nav for this extra icon, and the
+     upload button in the empty state already covers first-time setup */
+  .nav-bg-upload {
+    display: none;
+  }
+
   .bg-widgets-stack {
     position: relative;
     z-index: 10;
