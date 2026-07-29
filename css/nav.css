@@ -121,12 +121,15 @@
   transform: rotate(45deg);
 }
 
-/* Narrow phones (≤480px): shrink buttons/gap so pages with an extra
+/* Phones held in landscape (short viewport height — a phone stays under
+   ~500px tall in landscape regardless of how wide it is, while tablets/
+   desktops clear it easily): shrink buttons/gap so pages with an extra
    navExtra button (background.html, calendar.html — 7 icons total)
    don't push the leftmost icon off-screen. Also drop the "나만의 배경"
-   page link — its drag/resize widget board is a desktop-pointer feature
-   and isn't usable on touch. */
-@media (max-width: 480px) {
+   and "커스텀 위젯" page links — both are drag/resize widget boards whose
+   default layout overlaps at phone landscape widths, and dragging to fix
+   it isn't realistic on touch anyway. */
+@media (max-height: 500px) {
   .top-nav {
     top: calc(env(safe-area-inset-top) + 10px);
     right: calc(env(safe-area-inset-right) + 10px);
@@ -139,19 +142,20 @@
     font-size: 16px;
   }
 
-  .nav-page-background {
+  .nav-page-background,
+  .nav-page-custom {
     display: none;
   }
 }
 
-/* Phones in landscape: none of the pages have a landscape layout (the
-   calendar's flip-clock + grid alone stack taller than a phone's
-   landscape height), so block it with a rotate prompt instead of
-   shipping a broken one. Scoped to phone widths so a resized desktop
-   window is unaffected. */
-@media (max-width: 900px) and (orientation: landscape) {
+/* Phones in portrait: this app is designed landscape-first (the calendar's
+   flip-clock + grid sit side by side, the dashboard's 3-column layout
+   needs the width), so block portrait on phone-sized viewports with a
+   rotate prompt instead of shipping a cramped portrait layout. Scoped to
+   phone widths so a resized desktop window is unaffected. */
+@media (max-width: 900px) and (orientation: portrait) {
   body::before {
-    content: "📱 세로 모드로 돌려서 사용해주세요";
+    content: "📱 가로 모드로 돌려서 사용해주세요";
     position: fixed;
     inset: 0;
     z-index: 9999;
