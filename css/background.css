@@ -164,7 +164,7 @@ html, body {
   background: rgba(255, 255, 255, 0.26);
 }
 
-/* ---- widget picker bar (auto-hides, reveals on hover near the bottom edge) ---- */
+/* ---- always-visible board controls ---- */
 .widget-picker-zone {
   position: fixed;
   left: 0;
@@ -190,20 +190,6 @@ html, body {
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
-}
-
-/* auto-hide/reveal-on-hover only makes sense with a real mouse; touch
-   devices have no hover, so keep the bar permanently visible there */
-@media (hover: hover) and (pointer: fine) {
-  .widget-picker {
-    transform: translateY(calc(100% + 20px));
-    transition: transform 0.25s ease;
-  }
-
-  .widget-picker-zone:hover .widget-picker,
-  .widget-picker-zone:focus-within .widget-picker {
-    transform: translateY(0);
-  }
 }
 
 /* keep the shared toast above the widget picker bar on this page */
@@ -236,7 +222,7 @@ html, body {
   color: #fff;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 900px) {
   html, body {
     overflow-y: auto;
   }
@@ -260,6 +246,7 @@ html, body {
   .bg-widget[data-widget="clock"],
   .bg-widget[data-widget="weather"],
   .bg-widget[data-widget="timer"],
+  .bg-widget[data-widget="calendar"],
   .bg-widget[data-widget="todo"] {
     width: calc(100vw - 32px);
     position: static;
@@ -273,3 +260,29 @@ html, body {
     display: none;
   }
 }
+
+/* The board supports both a plain background and an optional photo. */
+:root { --cal-accent: #b5aaff; --cal-today-text: #ffffff; }
+.bg-widget[data-widget="calendar"] { width: min(340px, calc(100vw - 40px)); }
+.bg-widget .calendar-block { width: 100%; }
+.picker-chip[hidden] { display: none; }
+.board-page::before { display: none; }
+@media (max-width: 900px) {
+  .bg-widget[data-widget="calendar"] { width: calc(100vw - 32px); }
+}
+
+@media (max-width: 900px) {
+  .widget-picker { flex-wrap: wrap; justify-content: center; border-radius: 20px; }
+  .picker-chip { padding: 8px 10px; font-size: 12px; }
+  .bg-widgets-stack { padding-bottom: 160px; }
+  .toast { bottom: calc(env(safe-area-inset-bottom) + 150px); }
+}
+
+/* Keep calendar cells sized to the widget rather than the viewport. */
+.bg-widget .cal-header { padding: 16px; }
+.bg-widget .cal-month-label { font-size: 20px; }
+.bg-widget .cal-nav-btn { width: 32px; height: 32px; font-size: 22px; }
+.bg-widget .cal-weekdays { padding: 10px 12px 4px; }
+.bg-widget .cal-weekdays span { font-size: 13px; }
+.bg-widget .cal-grid { padding: 4px 12px 16px; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.bg-widget .cal-day { width: min(34px, 100%); font-size: 14px; }

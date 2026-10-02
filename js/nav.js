@@ -24,44 +24,38 @@
       id: "clock",
       href: "index.html",
       label: "시계 화면으로 돌아가기",
-      tooltip: "🕒 Clock · 디지털 시계",
+      tooltip: "시계",
       svg: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline></svg>'
     },
     {
       id: "dashboard",
       href: "dashboard.html",
       label: "대시보드",
-      tooltip: "🌤️ Dashboard · 날씨+포모도로",
+      tooltip: "대시보드",
       svg: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg>'
     },
     {
       id: "todo",
       href: "toDoList.html",
       label: "할 일 목록",
-      tooltip: "✅ Today's Plan · 오늘 할 일",
+      tooltip: "할 일",
       svg: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>'
     },
     {
       id: "background",
       href: "background.html",
-      label: "나만의 배경",
-      tooltip: "🖼️ My Background · 나만의 배경 만들기",
+      label: "내 보드",
+      tooltip: "내 보드",
       svg: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg>'
     },
     {
       id: "calendar",
       href: "calendar.html",
       label: "시계+달력",
-      tooltip: "📅 Calendar · 시계+달력",
+      tooltip: "달력",
       svg: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>'
     },
-    {
-      id: "custom",
-      href: "custom.html",
-      label: "커스텀 위젯",
-      tooltip: "🧩 Custom · 위젯 배치",
-      svg: '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="14" y="6" width="7" height="7" rx="2"></rect><rect x="6" y="14" width="7" height="7" rx="2"></rect><rect x="16" y="16" width="5" height="5" rx="1.5"></rect></svg>'
-    }
+
   ];
 
   var FULLSCREEN_BTN =

@@ -125,10 +125,7 @@
    ~500px tall in landscape regardless of how wide it is, while tablets/
    desktops clear it easily): shrink buttons/gap so pages with an extra
    navExtra button (background.html, calendar.html — 7 icons total)
-   don't push the leftmost icon off-screen. Also drop the "나만의 배경"
-   and "커스텀 위젯" page links — both are drag/resize widget boards whose
-   default layout overlaps at phone landscape widths, and dragging to fix
-   it isn't realistic on touch anyway. */
+   don't push the leftmost icon off-screen. */
 @media (max-height: 500px) {
   .top-nav {
     top: calc(env(safe-area-inset-top) + 10px);
@@ -142,10 +139,7 @@
     font-size: 16px;
   }
 
-  .nav-page-background,
-  .nav-page-custom {
-    display: none;
-  }
+
 }
 
 /* Phones in portrait: this app is designed landscape-first (the calendar's

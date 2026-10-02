@@ -130,7 +130,14 @@ function showWeather(cityName, weatherData) {
   if (!weatherIconEl || !weatherCityEl || !weatherDescEl) return;
   const current = weatherData.current;
   const [desc, emoji] = describeWeather(current.weather_code);
-  weatherIconEl.textContent = emoji;
+  if (document.body.classList.contains("board-page")) {
+    const path = current.weather_code <= 1
+      ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1 1m12 12 1 1M5 19l1-1M18 6l1-1"/>'
+      : '<path d="M6 18a4 4 0 0 1 0-8 6 6 0 0 1 11-2 5 5 0 0 1 1 10Z"/>';
+    weatherIconEl.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+  } else {
+    weatherIconEl.textContent = emoji;
+  }
   weatherCityEl.textContent = `${cityName} | ${Math.round(current.temperature_2m)}°C`;
   weatherDescEl.textContent = desc;
 }
@@ -346,12 +353,12 @@ function renderActiveTimer() {
     const state = pomodoroEngine.getState();
     timerDisplayEl.textContent = formatTime(state.remaining);
     timerCaptionEl.textContent = POMODORO_CAPTION();
-    timerStartBtn.textContent = state.running ? "⏸ 일시정지" : "▶ 시작하기";
+    timerStartBtn.textContent = state.running ? "일시정지" : "시작하기";
     timerStartBtn.classList.toggle("is-running", state.running);
   } else if (activeTab === "timer") {
     timerDisplayEl.textContent = formatTime(timerState.remaining);
     timerCaptionEl.textContent = "카운트다운 타이머";
-    timerStartBtn.textContent = timerState.running ? "⏸ 일시정지" : "▶ 시작하기";
+    timerStartBtn.textContent = timerState.running ? "일시정지" : "시작하기";
     timerStartBtn.classList.toggle("is-running", timerState.running);
     timerMinutesLabel.textContent = `${timerState.durationMinutes}분`;
     timerMinusBtn.disabled = timerState.durationMinutes <= TIMER_MIN;
@@ -359,7 +366,7 @@ function renderActiveTimer() {
   } else {
     timerDisplayEl.textContent = formatTime(stopwatchState.elapsed);
     timerCaptionEl.textContent = "스톱워치";
-    timerStartBtn.textContent = stopwatchState.running ? "⏸ 일시정지" : "▶ 시작";
+    timerStartBtn.textContent = stopwatchState.running ? "일시정지" : "시작";
     timerStartBtn.classList.toggle("is-running", stopwatchState.running);
   }
 }
@@ -498,6 +505,6 @@ function attachTilt(card) {
   card.addEventListener("pointerleave", onLeave);
 }
 
-if (canTilt) {
+if (canTilt && !document.body.classList.contains("board-page")) {
   document.querySelectorAll(".card").forEach(attachTilt);
 }
